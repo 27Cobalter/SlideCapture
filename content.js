@@ -23,7 +23,7 @@ function checkChangeImage(){
   if(lastCanvas.width == currentCanvas.width){
     var lastImage = lastCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
     var sigma = 0;
-    var pixCount = 0;
+    var pixCount = 1;
     for(var i = 0; i < currentImage.width*currentImage.height * 4; i+=4){
       // 白か黒のみ判定
       // if(Math.abs(currentImage.data[i]+currentImage.data[i+1]+currentImage.data[i+2]-384)>368
