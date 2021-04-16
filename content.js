@@ -3,7 +3,7 @@ function initialize(){
   videoElement = document.getElementsByTagName('video')[0];
   canvas = document.createElement('canvas');
   canvas.id = 'canvas';
-  lastCanvas = null;
+  lastCanvas = document.createElement('canvas');
 };
 
 function capture(){
@@ -20,7 +20,7 @@ function checkChangeImage(){
   canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
   var currentCanvas = canvas;
   var currentImage = currentCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-  if(lastCanvas != null && lastCanvas.width == currentCanvas.width){
+  if(lastCanvas.width == currentCanvas.width){
     var lastImage = lastCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
     var sigma = 0;
     var pixCount = 0;
@@ -43,8 +43,11 @@ function checkChangeImage(){
     if(mse > 5000){
       capture();
     }
+  }else{
+    lastCanvas.width = currentCanvas.width;
+    lastCanvas.height = currentCanvas.height;
   }
-  lastCanvas = currentCanvas;
+  lastCanvas.getContext('2d').putImageData(currentImage, 0, 0);
 }
 
 document.body.addEventListener('keydown', event => {
