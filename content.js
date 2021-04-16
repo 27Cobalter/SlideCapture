@@ -1,8 +1,6 @@
 function initialize(){
-  console.log("initialize");
   i = 0;
   videoElement = document.getElementsByTagName('video')[0];
-  console.log(videoElement);
   canvas = document.createElement('canvas');
   canvas.id = 'canvas';
   canvas.width = videoElement.videoWidth;
@@ -10,11 +8,10 @@ function initialize(){
 };
 
 function capture(){
-  console.log("capture");
-  videoElement.currentTime -= 5;
+  videoElement.currentTime -= 3;
   canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-  // TODO: うまくダウンロードされない（なぜ）
+  // うまくダウンロードされない -> ブラウザでの自動ダウンロードの許可
   link = document.createElement('a');
   link.href = canvas.toDataURL();
   link.download = (++i)+".png";
@@ -31,9 +28,12 @@ document.body.addEventListener('keydown',
 function main(e){
   const initCheckTimer = setInterval(jsLoaded,1000);
   function jsLoaded(){
-    if(document.querySelector('video') != null) {
+    video = document.querySelector('video');
+    if(video != null) {
       clearInterval(initCheckTimer);
-      initialize();
+      video.addEventListener('loadedmetadata',(event) => {
+        initialize();
+      });
     }
   };
 };
