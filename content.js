@@ -24,17 +24,19 @@ function checkChangeImage(){
     var lastImage = lastCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
     var sigma = 0;
     var pixCount = 1;
-    for(var i = 0; i < currentImage.width*currentImage.height * 4; i+=4){
-      // 白か黒のみ判定
-      // if(Math.abs(currentImage.data[i]+currentImage.data[i+1]+currentImage.data[i+2]-384)>368
-      // && Math.abs(lastImage.data[i]+lastImage.data[i+1]+lastImage.data[i+2]-384)>368){
-      if(Math.abs(currentImage.data[i] + currentImage.data[i+1] + currentImage.data[i+2] - 384) > 368
-        // 順番に表示してくる教員に対応(元が白かったらスキップ)
-        && (lastImage.data[i] + lastImage.data[i+1] + lastImage.data[i+2]) < 16){
-        // sigma += Math.pow(currentImage.data[i]-lastImage.data[i], 2);
-        // oldが0近くならcurrentImageだけで近似できる
-        sigma += Math.pow(currentImage.data[i], 2);
-        pixCount++;
+    for(var j = 0; j < currentImage.height; j++){
+      for(var i = 0; i < currentImage.width; i++){
+        p = (j * currentImage.width + i) * 4;
+        // 白か黒のみ判定
+        if(Math.abs(currentImage.data[p] + currentImage.data[p+1] + currentImage.data[p+2] - 384) > 368
+          // 順番に表示してくる教員に対応(元が白かったらスキップ)
+          && (lastImage.data[p] + lastImage.data[p+1] + lastImage.data[p+2]) < 250){
+          // oldが0近くならcurrentImageだけで近似できる
+          r2 = Math.pow(j-(currentImage.height/2), 2) + Math.pow(i-(currentImage.width/2), 2);
+          x = r2 / (Math.pow(currentImage.height/2, 2) + Math.pow(currentImage.width/2, 2));
+          sigma += Math.pow(currentImage.data[p], 2) * Math.exp(-x);
+          pixCount++;
+        }
       }
     }
     var mse = sigma / pixCount;
