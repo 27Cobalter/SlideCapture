@@ -1,0 +1,12 @@
+{
+  "name": "SlideCapture",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "ビデオキャプチャするやつ",
+  "content_scripts": [{
+    "matches": ["https://web.microsoftstream.com/video/*"],
+    "js": [
+      "content.js"
+    ]
+  }]
+}
