@@ -23,7 +23,7 @@ function checkChangeImage(){
   if(lastCanvas.width == currentCanvas.width){
     var lastImage = lastCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
     var sigma = 0;
-    var pixCount = 1;
+    var pixCount = 0.0001;
     for(var j = 0; j < currentImage.height; j++){
       for(var i = 0; i < currentImage.width; i++){
         var p = (j * currentImage.width + i) * 4;
@@ -35,14 +35,14 @@ function checkChangeImage(){
           r2 = Math.pow(j-(currentImage.height/2), 2) + Math.pow(i-(currentImage.width/2), 2);
           x = r2 / (Math.pow(currentImage.height/2, 2) + Math.pow(currentImage.width/2, 2));
           sigma += Math.pow(currentImage.data[p], 2) * Math.exp(-x);
-          pixCount++;
+          pixCount += Math.exp(-x);
         }
       }
     }
-    var mse = sigma / pixCount;
-    console.log("mse " + mse);
+    var score = sigma / pixCount;
+    console.log("score " + score + " at " + videoElement.currentTime);
 
-    if(mse > 30000){
+    if(score > 30000){
       capture();
     }
   }else{
