@@ -26,11 +26,11 @@ function checkChangeImage(){
     var pixCount = 1;
     for(var j = 0; j < currentImage.height; j++){
       for(var i = 0; i < currentImage.width; i++){
-        p = (j * currentImage.width + i) * 4;
+        var p = (j * currentImage.width + i) * 4;
         // 白か黒のみ判定
-        if(Math.abs(currentImage.data[p] + currentImage.data[p+1] + currentImage.data[p+2] - 384) > 368
+        if(Math.abs(currentImage.data[p] + currentImage.data[p+1] + currentImage.data[p+2] - 384) > 320
           // 順番に表示してくる教員に対応(元が白かったらスキップ)
-          && (lastImage.data[p] + lastImage.data[p+1] + lastImage.data[p+2]) < 250){
+          && (lastImage.data[p] < 80 && lastImage.data[p+1] < 80 && lastImage.data[p+2] < 80)){
           // oldが0近くならcurrentImageだけで近似できる
           r2 = Math.pow(j-(currentImage.height/2), 2) + Math.pow(i-(currentImage.width/2), 2);
           x = r2 / (Math.pow(currentImage.height/2, 2) + Math.pow(currentImage.width/2, 2));
@@ -42,7 +42,7 @@ function checkChangeImage(){
     var mse = sigma / pixCount;
     console.log("mse " + mse);
 
-    if(mse > 5000){
+    if(mse > 30000){
       capture();
     }
   }else{
