@@ -1,3 +1,11 @@
+function sec2hour(rawTime){
+  var time = Math.floor(rawTime);
+  var sec = String((time % 60) % 60).padStart(2,'0');
+  var min = String(Math.floor(time / 60) % 60).padStart(2, '0');
+  var hour = String(Math.floor(time / 3600)).padStart(2, '0');
+  return hour + ":" + min + ":" + sec;
+}
+
 function initialize(){
   i = 0;
   videoElement = document.getElementsByTagName('video')[0];
@@ -20,8 +28,9 @@ function checkChangeImage(){
   canvas.getContext('2d').drawImage(videoElement, 0, 0, canvas.width, canvas.height);
   var currentCanvas = canvas;
   var currentImage = currentCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+  lastContext = lastCanvas.getContext('2d');
   if(lastCanvas.width == currentCanvas.width){
-    var lastImage = lastCanvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+    var lastImage = lastContext.getImageData(0, 0, canvas.width, canvas.height);
     var sigma = 0;
     var pixCount = 0.0001;
     for(var j = 0; j < currentImage.height; j++){
@@ -43,13 +52,15 @@ function checkChangeImage(){
     console.log("score " + score + " at " + videoElement.currentTime);
 
     if(score > 30000){
+      lastContext.font = (lastCanvas.height/20) + "px serif";
+      lastContext.fillText("~"+sec2hour(videoElement.currentTime), 0, lastCanvas.height*0.99);
       capture();
     }
   }else{
     lastCanvas.width = currentCanvas.width;
     lastCanvas.height = currentCanvas.height;
   }
-  lastCanvas.getContext('2d').putImageData(currentImage, 0, 0);
+  lastContext.putImageData(currentImage, 0, 0);
 }
 
 document.body.addEventListener('keydown', event => {
