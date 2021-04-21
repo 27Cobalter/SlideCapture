@@ -52,7 +52,8 @@ function checkChangeImage(){
     console.log("score " + score + " at " + videoElement.currentTime);
 
     if(score > 30000){
-      lastContext.font = (lastCanvas.height/20) + "px serif";
+      lastContext.font = (lastCanvas.height/40) + "px serif";
+      lastContext.fillStyle = "#888888"
       lastContext.fillText("~"+sec2hour(videoElement.currentTime), 0, lastCanvas.height*0.99);
       capture();
     }
