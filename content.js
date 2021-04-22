@@ -18,7 +18,7 @@ function capture(){
   // うまくダウンロードされない -> ブラウザでの自動ダウンロードの許可
   link = document.createElement('a');
   link.href = lastCanvas.toDataURL();
-  link.download = (++i) + ".png";
+  link.download = String(++i).padStart(2, '0') + ".png";
   link.click();
 };
 
